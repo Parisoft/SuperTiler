@@ -48,11 +48,11 @@ public class SuperTiler {
         sprite.addArgument("-H", "--frameh").nargs("?").required(false).type(Integer.class).setDefault(8).help("Height if each frame from image");
         sprite.addArgument("-s", "--tilesize").nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5).setDefault(0)
                 .help("Size of the sprites (SNES only):" + System.lineSeparator()
-                              + "0 =  8x8  and 16x16 sprites\n" + System.lineSeparator()
-                              + "1 =  8x8  and 32x32 sprites\n" + System.lineSeparator()
-                              + "2 =  8x8  and 64x64 sprites\n" + System.lineSeparator()
-                              + "3 = 16x16 and 32x32 sprites\n" + System.lineSeparator()
-                              + "4 = 16x16 and 64x64 sprites\n" + System.lineSeparator()
+                              + "0 =  8x8  and 16x16 sprites" + System.lineSeparator()
+                              + "1 =  8x8  and 32x32 sprites" + System.lineSeparator()
+                              + "2 =  8x8  and 64x64 sprites" + System.lineSeparator()
+                              + "3 = 16x16 and 32x32 sprites" + System.lineSeparator()
+                              + "4 = 16x16 and 64x64 sprites" + System.lineSeparator()
                               + "5 = 32x32 and 64x64 sprites");
         sprite.addArgument("-S", "--applysmall").nargs("?").required(false).type(Boolean.class).setDefault(true)
                 .help("If applylarge is not set, all tiles size are the one define in tileize. See applylarge when both are set. (SNES only)");
