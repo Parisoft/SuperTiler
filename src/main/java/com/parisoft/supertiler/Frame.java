@@ -8,12 +8,13 @@ import java.util.List;
 
 import static com.parisoft.supertiler.Obj.LARGE_SIZE;
 import static com.parisoft.supertiler.Obj.SMALL_SIZE;
+import static com.parisoft.supertiler.SuperTiler.applyLarge;
+import static com.parisoft.supertiler.SuperTiler.applySmall;
 import static com.parisoft.supertiler.SuperTiler.frameHeight;
 import static com.parisoft.supertiler.SuperTiler.frameWidth;
-import static com.parisoft.supertiler.SuperTiler.largeTilePixels;
-import static com.parisoft.supertiler.SuperTiler.smallTilePixels;
-import static com.parisoft.supertiler.SuperTiler.xOff;
-import static com.parisoft.supertiler.SuperTiler.yOff;
+import static com.parisoft.supertiler.SuperTiler.objSpSize;
+import static com.parisoft.supertiler.SuperTiler.objXOff;
+import static com.parisoft.supertiler.SuperTiler.objYOff;
 
 class Frame {
 
@@ -26,24 +27,41 @@ class Frame {
         this.x = x;
         this.y = y;
 
-        for (y = this.y; y < this.y + frameHeight; y += largeTilePixels) {
-            for (x = this.x; x < this.x + frameWidth; x += largeTilePixels) {
-                BigTile largeTile = new BigTile(largeTilePixels, img, x, y);
+        if (applyLarge && applySmall) {
+            for (y = this.y; y < this.y + frameHeight; y += objSpSize.large) {
+                for (x = this.x; x < this.x + frameWidth; x += objSpSize.large) {
+                    BigTile largeTile = new BigTile(objSpSize.large, img, x, y);
 
-                if (largeTile.isEmpty()) {
-                    continue;
-                }
-
-                if (smallTilePixels < largeTilePixels) {
-                    List<BigTile> smallSubTiles = largeTile.split();
-
-                    if (smallSubTiles.size() > 0) {
-                        smallTiles.addAll(smallSubTiles);
+                    if (largeTile.isEmpty()) {
                         continue;
                     }
-                }
 
-                largeTiles.add(largeTile);
+                    List<BigTile> smallSubTiles = largeTile.split();
+
+                    if (smallSubTiles.isEmpty()) {
+                        largeTiles.add(largeTile);
+                    } else {
+                        smallTiles.addAll(smallSubTiles);
+                    }
+                }
+            }
+        }else {
+            byte tilePixels = applyLarge ? objSpSize.large : objSpSize.small;
+
+            for (y = this.y; y < this.y + frameHeight; y += tilePixels) {
+                for (x = this.x; x < this.x + frameWidth; x += tilePixels) {
+                    BigTile tile = new BigTile(tilePixels, img, x, y);
+
+                    if (tile.isEmpty()) {
+                        continue;
+                    }
+
+                    if (applyLarge) {
+                        largeTiles.add(tile);
+                    } else {
+                        smallTiles.add(tile);
+                    }
+                }
             }
         }
     }
@@ -56,17 +74,21 @@ class Frame {
         for (BigTile tile : tiles) {
             byte row = (byte) (tile.y - this.y);
             byte col = (byte) (tile.x - this.x);
-            Obj obj = tile.getObj((byte) (xOff + row), (byte) (yOff + col), size);
+            Obj obj = tile.getObj((byte) (objXOff + row), (byte) (objYOff + col), size);
             metasprite.add(obj);
         }
     }
 
     void createSmallMetasprites() {
-        createMetasprites(smallTiles, SMALL_SIZE);
+        if (applySmall) {
+            createMetasprites(smallTiles, SMALL_SIZE);
+        }
     }
 
     void createLargeMetasprites() {
-        createMetasprites(largeTiles, largeTilePixels > smallTilePixels ? LARGE_SIZE : SMALL_SIZE);
+        if (applyLarge) {
+            createMetasprites(largeTiles, LARGE_SIZE);
+        }
     }
 
     void write(FileOutputStream output) throws IOException {

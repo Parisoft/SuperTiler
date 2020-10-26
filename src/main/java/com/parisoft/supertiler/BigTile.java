@@ -10,9 +10,8 @@ import java.util.stream.Stream;
 
 import static com.parisoft.supertiler.Obj.HORIZONTAL_MIRROR;
 import static com.parisoft.supertiler.Obj.VERTICAL_MIRROR;
-import static com.parisoft.supertiler.SuperTiler.smallTilePixels;
+import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.tileset;
-import static java.lang.Math.pow;
 import static java.util.Collections.emptyList;
 
 class BigTile {
@@ -90,7 +89,7 @@ class BigTile {
 
     List<BigTile> split() {
         List<BigTile> smallTiles = new ArrayList<>();
-        byte smallLen = (byte) (smallTilePixels / 8);
+        byte smallLen = (byte) (objSpSize.small / 8);
 
         for (int row = 0; row <= tiles.length - smallLen; row += smallLen) {
             for (int col = 0; col <= tiles[row].length - smallLen; col += smallLen) {
@@ -106,7 +105,7 @@ class BigTile {
             }
         }
 
-        if (smallTiles.size() > pow(tiles.length, 2) / 2) {
+        if (smallTiles.size() > objSpSize.large / objSpSize.small) {
             return emptyList();
         }
 

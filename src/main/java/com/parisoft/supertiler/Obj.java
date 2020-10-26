@@ -3,9 +3,9 @@ package com.parisoft.supertiler;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static com.parisoft.supertiler.SuperTiler.palNum;
-import static com.parisoft.supertiler.SuperTiler.priority;
-import static com.parisoft.supertiler.SuperTiler.tilesetNum;
+import static com.parisoft.supertiler.SuperTiler.objPalNum;
+import static com.parisoft.supertiler.SuperTiler.objPriority;
+import static com.parisoft.supertiler.SuperTiler.objTilesetNum;
 
 class Obj {
 
@@ -25,7 +25,7 @@ class Obj {
         this.y = y;
         this.tile = tile;
         this.size = size;
-        this.attr = (byte) (attr | (priority << 5) | (palNum << 3) | tilesetNum);
+        this.attr = (byte) (attr | (objPriority << 5) | (objPalNum << 3) | objTilesetNum);
     }
 
     void write(FileOutputStream output) throws IOException {
