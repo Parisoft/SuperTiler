@@ -25,6 +25,7 @@ public class SuperTiler {
     static byte objXOff;
     static byte objYOff;
     static SpriteSize objSpSize;
+    static byte objTileOff;
     static boolean applySmall;
     static boolean applyLarge;
     static byte frameWidth;
@@ -42,37 +43,46 @@ public class SuperTiler {
         sprite.addArgument("-p", "--palette").nargs("?").required(false).type(String.class).help("Output palette file");
         sprite.addArgument("-m", "--metasprite").nargs("?").required(false).type(String.class).help("Prefix for metasprite files");
         sprite.addArgument("-M", "--mode").nargs("?").required(false).type(String.class).choices("snes", "nes").help("Mode for target console");
-        sprite.addArgument("-B", "--bpp").nargs("?").required(false).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
-        sprite.addArgument("-W", "--frame-width").nargs("?").required(false).setDefault(8).help("Width of each frame from image");
-        sprite.addArgument("-H", "--frame-height").nargs("?").required(false).setDefault(8).help("Height if each frame from image");
-        sprite.addArgument("-s", "--tile-size").nargs("?").required(false).setDefault(0).help("Size of the sprites (SNES only)");
-        sprite.addArgument("-S", "--apply-small").nargs("?").required(false).setDefault(true)
-                .help("If apply-large is not set, all tiles size are the one define in tile-size. See apply-large when both are set. (SNES only)");
-        sprite.addArgument("-L", "--apply-large").nargs("?").required(false).setDefault(false)
-                .help("When mode is snes, SuperTiler will first scan for large tiles defined in tile-size then, if apply-small is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
+        sprite.addArgument("-B", "--bpp").nargs("?").required(false).type(Integer.class).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
+        sprite.addArgument("-W", "--framew").nargs("?").required(false).type(Integer.class).setDefault(8).help("Width of each frame from image");
+        sprite.addArgument("-H", "--frameh").nargs("?").required(false).type(Integer.class).setDefault(8).help("Height if each frame from image");
+        sprite.addArgument("-s", "--tilesize").nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5).setDefault(0)
+                .help("Size of the sprites (SNES only):" + System.lineSeparator()
+                              + "0 =  8x8  and 16x16 sprites\n" + System.lineSeparator()
+                              + "1 =  8x8  and 32x32 sprites\n" + System.lineSeparator()
+                              + "2 =  8x8  and 64x64 sprites\n" + System.lineSeparator()
+                              + "3 = 16x16 and 32x32 sprites\n" + System.lineSeparator()
+                              + "4 = 16x16 and 64x64 sprites\n" + System.lineSeparator()
+                              + "5 = 32x32 and 64x64 sprites");
+        sprite.addArgument("-S", "--applysmall").nargs("?").required(false).type(Boolean.class).setDefault(true)
+                .help("If applylarge is not set, all tiles size are the one define in tileize. See applylarge when both are set. (SNES only)");
+        sprite.addArgument("-L", "--applylarge").nargs("?").required(false).type(Boolean.class).setDefault(false)
+                .help("When mode is snes, SuperTiler will first scan for large tiles defined in tilesize then, if applysmall is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
                               + "When mode is nes, tiles are 8x16");
-        sprite.addArgument("--pal-num").nargs("?").required(false).choices(0, 1, 2, 3, 4, 5, 6, 7).setDefault(0).help("Object palette number");
-        sprite.addArgument("--priority").nargs("?").required(false).choices(0, 1, 2, 3).setDefault(2).help("Object priority (SNES only)");
-        sprite.addArgument("--tileset-num").nargs("?").required(false).choices(0, 1).setDefault(0).help("Object tileset number (SNES only)");
-        sprite.addArgument("-X", "--xoff").nargs("?").required(false).setDefault(0).help("Object X offset");
-        sprite.addArgument("-Y", "--yoff").nargs("?").required(false).setDefault(0).help("Object Y offset");
+        sprite.addArgument("--palnum").nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5, 6, 7).setDefault(0).help("Object palette number");
+        sprite.addArgument("--priority").nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3).setDefault(2).help("Object priority (SNES only)");
+        sprite.addArgument("--tilesetnum").nargs("?").required(false).type(Integer.class).choices(0, 1).setDefault(0).help("Object tileset number (SNES only)");
+        sprite.addArgument("-X", "--xoff").nargs("?").required(false).type(Integer.class).setDefault(0).help("Object X offset");
+        sprite.addArgument("-Y", "--yoff").nargs("?").required(false).type(Integer.class).setDefault(0).help("Object Y offset");
+        sprite.addArgument("-T", "--tileoff").nargs("?").required(false).type(Integer.class).setDefault(0).help("Objet tile offset");
 
         Namespace namespace = null;
 
         try {
             namespace = parser.parseArgs(args);
             mode = namespace.getString("mode");
-            bpp = namespace.getByte("bpp");
-            objPalNum = namespace.getByte("pal-num");
-            objPriority = namespace.getByte("priority");
-            objTilesetNum = namespace.getByte("tileset-num");
-            objXOff = namespace.getByte("xoff");
-            objYOff = namespace.getByte("yoff");
-            objSpSize = SpriteSize.valueOf(namespace.getInt("tile-size"));
-            applySmall = namespace.getBoolean("apply-small");
-            applyLarge = namespace.getBoolean("apply-large");
-            frameWidth = namespace.getByte("frame-width");
-            frameHeight = namespace.getByte("frame-height");
+            bpp = namespace.getInt("bpp").byteValue();
+            objPalNum = namespace.getInt("palnum").byteValue();
+            objPriority = namespace.getInt("priority").byteValue();
+            objTilesetNum = namespace.getInt("tilesetnum").byteValue();
+            objXOff = namespace.getInt("xoff").byteValue();
+            objYOff = namespace.getInt("yoff").byteValue();
+            objSpSize = SpriteSize.valueOf(namespace.getInt("tilesize"));
+            objTileOff = namespace.getInt("tileoff").byteValue();
+            applySmall = namespace.getBoolean("applysmall");
+            applyLarge = namespace.getBoolean("applylarge");
+            frameWidth = namespace.getInt("framew").byteValue();
+            frameHeight = namespace.getInt("frameh").byteValue();
         } catch (ArgumentParserException e) {
             parser.handleError(e);
             System.exit(1);

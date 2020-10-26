@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import static com.parisoft.supertiler.SuperTiler.objPalNum;
 import static com.parisoft.supertiler.SuperTiler.objPriority;
+import static com.parisoft.supertiler.SuperTiler.objTileOff;
 import static com.parisoft.supertiler.SuperTiler.objTilesetNum;
 
 class Obj {
@@ -29,6 +30,6 @@ class Obj {
     }
 
     void write(FileOutputStream output) throws IOException {
-        output.write(new byte[]{x, y, tile, attr, size});
+        output.write(new byte[]{x, y, (byte) (tile + objTileOff), attr, size});
     }
 }
