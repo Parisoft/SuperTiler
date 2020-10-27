@@ -19,7 +19,11 @@ class Tile {
     Tile(Raster img, int x, int y) {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
-                pixels[row][col] = (byte) img.getPixel(x + col, y + row, (int[]) null)[0];
+                try {
+                    pixels[row][col] = (byte) img.getPixel(x + col, y + row, (int[]) null)[0];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    pixels[row][col] = 0;
+                }
             }
         }
 
