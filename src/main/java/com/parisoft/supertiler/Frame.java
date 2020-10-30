@@ -74,7 +74,7 @@ class Frame {
         for (BigTile tile : tiles) {
             byte row = (byte) (tile.y - this.y);
             byte col = (byte) (tile.x - this.x);
-            Obj obj = tile.getObj((byte) (objXOff + row), (byte) (objYOff + col), size);
+            Obj obj = tile.getObj((byte) (objXOff + col), (byte) (objYOff + row), size);
             metasprite.add(obj);
         }
     }

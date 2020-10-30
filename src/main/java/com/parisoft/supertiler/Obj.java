@@ -11,7 +11,7 @@ import static com.parisoft.supertiler.SuperTiler.objTilesetNum;
 class Obj {
 
     static final byte VERTICAL_MIRROR = (byte) 0x80;
-    static final byte HORIZONTAL_MIRROR = 0x7e;
+    static final byte HORIZONTAL_MIRROR = 0x40;
     static final byte SMALL_SIZE = 0;
     static final byte LARGE_SIZE = 2;
 
@@ -26,7 +26,7 @@ class Obj {
         this.y = y;
         this.tile = tile;
         this.size = size;
-        this.attr = (byte) (attr | (objPriority << 5) | (objPalNum << 3) | objTilesetNum);
+        this.attr = (byte) (attr | (objPriority << 4) | (objPalNum << 1) | objTilesetNum);
     }
 
     void write(FileOutputStream output) throws IOException {
