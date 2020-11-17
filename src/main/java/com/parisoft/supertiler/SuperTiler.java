@@ -28,8 +28,8 @@ public class SuperTiler {
     static byte objTileOff;
     static boolean applySmall;
     static boolean applyLarge;
-    static byte frameWidth;
-    static byte frameHeight;
+    static byte metatileWidth;
+    static byte metatileHeight;
     static Tile[][] tileset = new Tile[16][16];
 
     public static void main(String[] args) throws IOException {
@@ -41,11 +41,11 @@ public class SuperTiler {
         sprite.addArgument("-i", "--input").nargs("?").required(true).type(String.class).help("Input indexed PNG image");
         sprite.addArgument("-t", "--tileset").nargs("?").required(false).type(String.class).help("Output tileset file");
         sprite.addArgument("-p", "--palette").nargs("?").required(false).type(String.class).help("Output palette file");
-        sprite.addArgument("-m", "--metasprite").nargs("?").required(false).type(String.class).help("Prefix for metasprite files");
-        sprite.addArgument("-M", "--mode").nargs("?").required(false).type(String.class).choices("snes", "nes").help("Mode for target console");
+        sprite.addArgument("-m", "--metatile").nargs("?").required(false).type(String.class).help("Prefix for metatile files");
+        sprite.addArgument("-M", "--mode").nargs("?").required(false).type(String.class).choices("snes", "nes").setDefault("snes").help("Mode for target console");
         sprite.addArgument("-B", "--bpp").nargs("?").required(false).type(Integer.class).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
-        sprite.addArgument("-W", "--framew").nargs("?").required(false).type(Integer.class).setDefault(8).help("Width of each frame from image");
-        sprite.addArgument("-H", "--frameh").nargs("?").required(false).type(Integer.class).setDefault(8).help("Height if each frame from image");
+        sprite.addArgument("-W", "--metaw").nargs("?").required(false).type(Integer.class).setDefault(8).help("Metatile width");
+        sprite.addArgument("-H", "--metah").nargs("?").required(false).type(Integer.class).setDefault(8).help("Metatile height");
         sprite.addArgument("-s", "--tilesize").nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5).setDefault(0)
                 .help("Size of the sprites (SNES only):" + System.lineSeparator()
                               + "0 =  8x8  and 16x16 sprites" + System.lineSeparator()
@@ -81,8 +81,8 @@ public class SuperTiler {
             objTileOff = namespace.getInt("tileoff").byteValue();
             applySmall = namespace.getBoolean("applysmall");
             applyLarge = namespace.getBoolean("applylarge");
-            frameWidth = namespace.getInt("framew").byteValue();
-            frameHeight = namespace.getInt("frameh").byteValue();
+            metatileWidth = namespace.getInt("metaw").byteValue();
+            metatileHeight = namespace.getInt("metah").byteValue();
         } catch (ArgumentParserException e) {
             parser.handleError(e);
             System.exit(1);
@@ -91,8 +91,8 @@ public class SuperTiler {
         WritableRaster img = ImageIO.read(new File(namespace.getString("input"))).getRaster();
         List<Frame> frames = new ArrayList<>();
 
-        for (int y = 0; y < img.getHeight(); y += frameHeight) {
-            for (int x = 0; x < img.getWidth(); x += frameWidth) {
+        for (int y = 0; y < img.getHeight(); y += metatileHeight) {
+            for (int x = 0; x < img.getWidth(); x += metatileWidth) {
                 Frame frame = new Frame(img, x, y);
 
                 if (frame.isEmpty()) {

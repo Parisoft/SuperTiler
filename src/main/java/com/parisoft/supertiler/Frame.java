@@ -10,8 +10,8 @@ import static com.parisoft.supertiler.Obj.LARGE_SIZE;
 import static com.parisoft.supertiler.Obj.SMALL_SIZE;
 import static com.parisoft.supertiler.SuperTiler.applyLarge;
 import static com.parisoft.supertiler.SuperTiler.applySmall;
-import static com.parisoft.supertiler.SuperTiler.frameHeight;
-import static com.parisoft.supertiler.SuperTiler.frameWidth;
+import static com.parisoft.supertiler.SuperTiler.metatileHeight;
+import static com.parisoft.supertiler.SuperTiler.metatileWidth;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
@@ -28,9 +28,31 @@ class Frame {
         this.y = y;
 
         if (applyLarge && applySmall) {
-            for (y = this.y; y < this.y + frameHeight; y += objSpSize.large) {
-                for (x = this.x; x < this.x + frameWidth; x += objSpSize.large) {
-                    BigTile largeTile = new BigTile(objSpSize.large, img, x, y);
+            for (y = this.y; y < this.y + metatileHeight; y += objSpSize.large) {
+                for (x = this.x; x < this.x + metatileWidth; x += objSpSize.large) {
+                    BigTile largeTile;
+
+                    try {
+                        largeTile = new BigTile(objSpSize.large, img, x, y);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        for (int sy = y; sy < y + objSpSize.large; sy += objSpSize.small) {
+                            for (int sx = x; sx < x + objSpSize.large; sx += objSpSize.small) {
+                                BigTile smallTile;
+
+                                try {
+                                    smallTile = new BigTile(objSpSize.small, img, sx, sy);
+                                } catch (ArrayIndexOutOfBoundsException ignore) {
+                                    continue;
+                                }
+
+                                if (!smallTile.isEmpty()) {
+                                    smallTiles.add(smallTile);
+                                }
+                            }
+                        }
+
+                        continue;
+                    }
 
                     if (largeTile.isEmpty()) {
                         continue;
@@ -45,12 +67,18 @@ class Frame {
                     }
                 }
             }
-        }else {
+        } else {
             byte tilePixels = applyLarge ? objSpSize.large : objSpSize.small;
 
-            for (y = this.y; y < this.y + frameHeight; y += tilePixels) {
-                for (x = this.x; x < this.x + frameWidth; x += tilePixels) {
-                    BigTile tile = new BigTile(tilePixels, img, x, y);
+            for (y = this.y; y < this.y + metatileHeight; y += tilePixels) {
+                for (x = this.x; x < this.x + metatileWidth; x += tilePixels) {
+                    BigTile tile;
+
+                    try {
+                        tile = new BigTile(tilePixels, img, x, y);
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        continue;
+                    }
 
                     if (tile.isEmpty()) {
                         continue;

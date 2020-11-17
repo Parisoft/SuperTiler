@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 
 import static com.parisoft.supertiler.Obj.HORIZONTAL_MIRROR;
 import static com.parisoft.supertiler.Obj.VERTICAL_MIRROR;
+import static com.parisoft.supertiler.SuperTiler.metatileHeight;
+import static com.parisoft.supertiler.SuperTiler.metatileWidth;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.tileset;
 import static java.util.Collections.emptyList;
@@ -31,6 +33,10 @@ class BigTile {
     }
 
     BigTile(int pixels, Raster img, int x, int y) {
+        if (x + pixels > metatileWidth || y + pixels > metatileHeight) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+
         tiles = new Tile[pixels / 8][pixels / 8];
         this.x = x;
         this.y = y;
@@ -72,7 +78,7 @@ class BigTile {
 
     boolean isEmpty() {
         return IntStream.range(0, tiles.length)
-                .allMatch(row -> Stream.of(tiles[row]).allMatch(tile -> tile == null || tile.isEmpty()));
+                .allMatch(row -> Stream.of(tiles[row]).allMatch(Tile::isNullOrEmpty));
     }
 
     private boolean isHMirrorOf(BigTile other) {
@@ -123,6 +129,10 @@ class BigTile {
                 byte tile = (byte) (row * tileset[row].length + col);
                 BigTile view = new BigTile(tileset, tiles.length, row, col);
 
+                if (view.isEmpty()) {
+                    continue;
+                }
+
                 if (equals(view)) {
                     return new Obj(xOff, yOff, tile, size, (byte) 0);
                 }
@@ -144,13 +154,16 @@ class BigTile {
         //If didnt reuse, search for an empty slot to insert it
         for (int row = 0; row <= tileset.length - tiles.length; row++) {
             for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
-                if (tileset[row][col] == null || tileset[row][col].isEmpty()) {
+                if (Tile.isNullOrEmpty(tileset[row][col])) {
+                    byte tile = (byte) (row * tileset[row].length + col);
+
                     for (Tile[] rowOfTiles : tiles) {
                         System.arraycopy(rowOfTiles, 0, tileset[row], col, tiles.length);
                         Arrays.fill(tileset[row], col + tiles.length, tileset[row].length, Tile.EMPTY);
+                        row++;
                     }
 
-                    return new Obj(xOff, yOff, (byte) (row * tileset[row].length + col), size, (byte) 0);
+                    return new Obj(xOff, yOff, tile, size, (byte) 0);
                 }
             }
         }
