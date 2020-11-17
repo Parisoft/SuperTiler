@@ -37,7 +37,7 @@ public class SuperTiler {
                 .build()
                 .defaultHelp(true)
                 .description("Tools for tiles generation for NES and Super NES");
-        ArgumentGroup sprite = parser.addArgumentGroup("sprite").description("Generates tileset, palettes, and metasprites from image");
+        ArgumentGroup sprite = parser.addArgumentGroup("sprite").description("Generates tileset, palettes, and metatiles from image");
         sprite.addArgument("-i", "--input").nargs("?").required(true).type(String.class).help("Input indexed PNG image");
         sprite.addArgument("-t", "--tileset").nargs("?").required(false).type(String.class).help("Output tileset file");
         sprite.addArgument("-p", "--palette").nargs("?").required(false).type(String.class).help("Output palette file");
@@ -108,8 +108,8 @@ public class SuperTiler {
             return;
         }
 
-        frames.forEach(Frame::createLargeMetasprites);
-        frames.forEach(Frame::createSmallMetasprites);
+        frames.forEach(Frame::createLargeMetatiles);
+        frames.forEach(Frame::createSmallMetatiles);
 
         String tilesetPath = namespace.getString("tileset");
 
@@ -128,11 +128,11 @@ public class SuperTiler {
             }
         }
 
-        String metasprite = namespace.getString("metasprite");
+        String metatile = namespace.getString("metatile");
 
-        if (metasprite != null) {
+        if (metatile != null) {
             for (int i = 0; i < frames.size(); i++) {
-                try (FileOutputStream output = new FileOutputStream(new File(metasprite + i + ".bin"))) {
+                try (FileOutputStream output = new FileOutputStream(new File(metatile + i + ".bin"))) {
                     frames.get(i).write(output);
                 }
             }

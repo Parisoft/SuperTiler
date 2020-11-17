@@ -20,7 +20,7 @@ class Frame {
 
     private List<BigTile> largeTiles = new ArrayList<>();
     private List<BigTile> smallTiles = new ArrayList<>();
-    private List<Obj> metasprite = new ArrayList<>();
+    private List<Obj> metatile = new ArrayList<>();
     private int x, y;
 
     Frame(Raster img, int x, int y) {
@@ -98,29 +98,29 @@ class Frame {
         return largeTiles.isEmpty() && smallTiles.isEmpty();
     }
 
-    private void createMetasprites(List<BigTile> tiles, byte size) {
+    private void createMetatiles(List<BigTile> tiles, byte size) {
         for (BigTile tile : tiles) {
             byte row = (byte) (tile.y - this.y);
             byte col = (byte) (tile.x - this.x);
             Obj obj = tile.getObj((byte) (objXOff + col), (byte) (objYOff + row), size);
-            metasprite.add(obj);
+            metatile.add(obj);
         }
     }
 
-    void createSmallMetasprites() {
+    void createSmallMetatiles() {
         if (applySmall) {
-            createMetasprites(smallTiles, SMALL_SIZE);
+            createMetatiles(smallTiles, SMALL_SIZE);
         }
     }
 
-    void createLargeMetasprites() {
+    void createLargeMetatiles() {
         if (applyLarge) {
-            createMetasprites(largeTiles, LARGE_SIZE);
+            createMetatiles(largeTiles, LARGE_SIZE);
         }
     }
 
     void write(FileOutputStream output) throws IOException {
-        for (Obj obj : metasprite) {
+        for (Obj obj : metatile) {
             obj.write(output);
         }
 
