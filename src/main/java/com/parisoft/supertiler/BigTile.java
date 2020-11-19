@@ -155,6 +155,7 @@ class BigTile {
         for (int row = 0; row <= tileset.length - tiles.length; row++) {
             for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
                 if (Tile.isNullOrEmpty(tileset[row][col])) {
+                    //FIXME save on Tile from tileset which size it is, so small tiles dont overlap larger ones
 //                    if (tiles.length == 1 || new BigTile(tileset, tiles.length, row, col).isEmpty()) {
                         byte tile = (byte) (row * tileset[row].length + col);
 
