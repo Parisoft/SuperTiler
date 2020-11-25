@@ -33,9 +33,9 @@ class BigTile {
     }
 
     BigTile(int pixels, Raster img, int x, int y) {
-        if (x + pixels > metatileWidth || y + pixels > metatileHeight) {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+//        if (x + pixels > metatileWidth || y + pixels > metatileHeight) {
+//            throw new ArrayIndexOutOfBoundsException();
+//        }
 
         tiles = new Tile[pixels / 8][pixels / 8];
         this.x = x;
