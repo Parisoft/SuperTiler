@@ -4,7 +4,6 @@ import com.parisoft.supertiler.SuperTiler;
 import com.parisoft.supertiler.pojo.Tile;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

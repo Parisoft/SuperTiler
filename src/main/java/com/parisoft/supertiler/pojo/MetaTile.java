@@ -98,7 +98,7 @@ public class MetaTile {
         return largeTiles.isEmpty() && smallTiles.isEmpty();
     }
 
-    private void createMetatiles(List<BigTile> tiles, byte size) {
+    private void buildMetatiles(List<BigTile> tiles, byte size) {
         for (BigTile tile : tiles) {
             byte row = (byte) (tile.y - this.y);
             byte col = (byte) (tile.x - this.x);
@@ -109,11 +109,11 @@ public class MetaTile {
 
     public void build() {
         if (applyLarge) {
-            createMetatiles(largeTiles, LARGE_SIZE);
+            buildMetatiles(largeTiles, LARGE_SIZE);
         }
 
         if (applySmall) {
-            createMetatiles(smallTiles, SMALL_SIZE);
+            buildMetatiles(smallTiles, SMALL_SIZE);
         }
     }
 

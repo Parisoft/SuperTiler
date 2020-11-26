@@ -29,8 +29,15 @@ import static com.parisoft.supertiler.SuperTiler.ARG_YOFF;
 public class SpriteCmd implements Cmd {
 
     @Override
+    @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "ConstantConditions"})
     public void execute() throws IOException {
-        new MetaTiles().write();
+        MetaTiles metaTiles = new MetaTiles();
+
+        if (metaTiles.isEmpty()) {
+            throw new IllegalStateException("No metatiles found");
+        }
+
+        metaTiles.write();
         TileSet.write();
         Palettes.write();
     }
@@ -38,7 +45,9 @@ public class SpriteCmd implements Cmd {
     public static void create(ArgumentParser parser) {
         Subparser sprite = parser.addSubparsers()
                 .addParser("sprite", true)
+                .aliases("sp")
                 .description("Generates " + ARG_TILESET + ", " + ARG_PALETTE + "s, and " + ARG_METATILE + "s from image")
+                .defaultHelp(true)
                 .setDefault("cmd", new SpriteCmd());
         sprite.addArgument("-i", "--" + ARG_INPUT).nargs("?").required(true).type(String.class).help("Input indexed PNG image");
         sprite.addArgument("-t", "--" + ARG_TILESET).nargs("?").required(false).type(String.class).help("Output " + ARG_TILESET + " file");
@@ -57,7 +66,7 @@ public class SpriteCmd implements Cmd {
                               + "4 = 16x16 and 64x64 sprites" + System.lineSeparator()
                               + "5 = 32x32 and 64x64 sprites");
         sprite.addArgument("-S", "--" + ARG_APPLYSMALL).nargs("?").required(false).type(Boolean.class).setDefault(true)
-                .help("If " + ARG_APPLYLARGE + " is not set, all tiles size are the one define in tileize. See applylarge when both are set. (SNES only)");
+                .help("If " + ARG_APPLYLARGE + " is not set, all tiles size are the one define in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES only)");
         sprite.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false)
                 .help("When " + ARG_MODE + " is snes, SuperTiler will first scan for large tiles defined in " + ARG_TILESIZE + " then, if " + ARG_APPLYSMALL + " is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
                               + "When " + ARG_MODE + " is nes, tiles are 8x16");

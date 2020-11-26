@@ -19,7 +19,11 @@ public enum SpriteSize {
         this.large = (byte) large;
     }
 
-    public static SpriteSize valueOf(int index) {
+    public static SpriteSize valueOf(Integer index) {
+        if (index == null) {
+            return null;
+        }
+
         return values()[index];
     }
 }
