@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.parisoft.supertiler.pojo.Obj.HORIZONTAL_MIRROR;
-import static com.parisoft.supertiler.pojo.Obj.VERTICAL_MIRROR;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.tileset;
+import static com.parisoft.supertiler.pojo.Obj.HORIZONTAL_MIRROR;
+import static com.parisoft.supertiler.pojo.Obj.VERTICAL_MIRROR;
 import static java.util.Collections.emptyList;
 
 class BigTile {
