@@ -53,7 +53,7 @@ public class SuperTiler {
     public static byte metatileWidth;
     public static byte metatileHeight;
     public static Namespace namespace;
-    public static Tile[][] tileset = new Tile[16][16];
+    public static Tile[][] tileset;
 
     public static void main(String[] args) throws IOException {
         ArgumentParser parser = ArgumentParsers.newFor("supertiler-" + VERSION + ".jar")

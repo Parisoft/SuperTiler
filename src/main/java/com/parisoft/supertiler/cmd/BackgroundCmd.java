@@ -1,5 +1,7 @@
 package com.parisoft.supertiler.cmd;
 
+import com.parisoft.supertiler.SuperTiler;
+import com.parisoft.supertiler.pojo.Tile;
 import com.parisoft.supertiler.pojo.TileMap;
 import com.parisoft.supertiler.util.Palettes;
 import com.parisoft.supertiler.util.TileSet;
@@ -22,6 +24,8 @@ public class BackgroundCmd implements Cmd {
 
     @Override
     public void execute() throws Exception {
+        SuperTiler.tileset = new Tile[0x1000][16];// max 64KiB
+
         TileMap tileMap = new TileMap();
 
         if (tileMap.isEmpty()) {

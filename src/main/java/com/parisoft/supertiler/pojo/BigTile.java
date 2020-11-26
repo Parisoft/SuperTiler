@@ -183,8 +183,13 @@ class BigTile {
                 int tile = row * tileset[row].length + col;
                 BigTile view = new BigTile(tileset, tiles.length, row, col);
 
-                if (view.isNull()) {
-                    continue;
+                if (view.isNull()) { // reach the end of tileset, just insert this tile
+                    for (Tile[] rowOfTiles : tiles) {
+                        System.arraycopy(rowOfTiles, 0, tileset[row], col, rowOfTiles.length);
+                        row++;
+                    }
+
+                    return new BG(tile, false, false);
                 }
 
                 if (equals(view)) {
@@ -201,25 +206,6 @@ class BigTile {
 
                 if (isHVMirrorOf(view)) {
                     return new BG(tile, true, true);
-                }
-            }
-        }
-
-        //If didnt find, search for an empty slot to insert it
-        for (int row = 0; row <= tileset.length - tiles.length; row++) {
-            for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
-                if (tileset[row][col] == null) {
-                    //FIXME save on Tile from tileset which size it is, so small tiles dont overlap larger ones
-//                    if (tiles.length == 1 || new BigTile(tileset, tiles.length, row, col).isEmpty()) {
-                    int tile = row * tileset[row].length + col;
-
-                    for (Tile[] rowOfTiles : tiles) {
-                        System.arraycopy(rowOfTiles, 0, tileset[row], col, rowOfTiles.length);
-                        row++;
-                    }
-
-                    return new BG(tile, false, false);
-//                    }
                 }
             }
         }

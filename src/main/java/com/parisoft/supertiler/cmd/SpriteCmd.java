@@ -1,5 +1,7 @@
 package com.parisoft.supertiler.cmd;
 
+import com.parisoft.supertiler.SuperTiler;
+import com.parisoft.supertiler.pojo.Tile;
 import com.parisoft.supertiler.util.MetaTiles;
 import com.parisoft.supertiler.util.Palettes;
 import com.parisoft.supertiler.util.TileSet;
@@ -31,6 +33,8 @@ public class SpriteCmd implements Cmd {
     @Override
     @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "ConstantConditions"})
     public void execute() throws IOException {
+        SuperTiler.tileset = new Tile[16][16];
+
         MetaTiles metaTiles = new MetaTiles();
 
         if (metaTiles.isEmpty()) {
