@@ -1,4 +1,4 @@
-package com.parisoft.supertiler;
+package com.parisoft.supertiler.pojo;
 
 import java.awt.image.Raster;
 import java.util.ArrayList;
@@ -8,10 +8,8 @@ import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.parisoft.supertiler.Obj.HORIZONTAL_MIRROR;
-import static com.parisoft.supertiler.Obj.VERTICAL_MIRROR;
-import static com.parisoft.supertiler.SuperTiler.metatileHeight;
-import static com.parisoft.supertiler.SuperTiler.metatileWidth;
+import static com.parisoft.supertiler.pojo.Obj.HORIZONTAL_MIRROR;
+import static com.parisoft.supertiler.pojo.Obj.VERTICAL_MIRROR;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.tileset;
 import static java.util.Collections.emptyList;
@@ -33,10 +31,6 @@ class BigTile {
     }
 
     BigTile(int pixels, Raster img, int x, int y) {
-//        if (x + pixels > metatileWidth || y + pixels > metatileHeight) {
-//            throw new ArrayIndexOutOfBoundsException();
-//        }
-
         tiles = new Tile[pixels / 8][pixels / 8];
         this.x = x;
         this.y = y;
@@ -123,7 +117,7 @@ class BigTile {
             return null;
         }
 
-        // Try to reuse if this tile is redundant
+        // Search for a clone tile in tileset
         for (int row = 0; row <= tileset.length - tiles.length; row++) {
             for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
                 byte tile = (byte) (row * tileset[row].length + col);
@@ -151,7 +145,7 @@ class BigTile {
             }
         }
 
-        //If didnt reuse, search for an empty slot to insert it
+        //If didnt find, search for an empty slot to insert it
         for (int row = 0; row <= tileset.length - tiles.length; row++) {
             for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
                 if (Tile.isNullOrEmpty(tileset[row][col])) {

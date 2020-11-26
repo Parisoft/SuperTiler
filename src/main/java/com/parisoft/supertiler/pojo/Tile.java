@@ -1,4 +1,4 @@
-package com.parisoft.supertiler;
+package com.parisoft.supertiler.pojo;
 
 import java.awt.image.Raster;
 import java.io.FileOutputStream;
@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 import static com.parisoft.supertiler.SuperTiler.bpp;
 import static java.lang.Math.pow;
 
-class Tile {
+public class Tile {
 
     static final Tile EMPTY = new Tile();
 
@@ -95,7 +95,7 @@ class Tile {
         return true;
     }
 
-    void write(FileOutputStream output) throws IOException {
+    public void write(FileOutputStream output) throws IOException {
         for (int plane = 0; plane < planes.length; plane += 2) {
             for (int b = 0; b < 8; b++) {
                 for (int p = plane; p < plane + 2; p++) {

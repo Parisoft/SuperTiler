@@ -1,4 +1,4 @@
-package com.parisoft.supertiler;
+package com.parisoft.supertiler.pojo;
 
 public enum SpriteSize {
 

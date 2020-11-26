@@ -1,4 +1,4 @@
-package com.parisoft.supertiler;
+package com.parisoft.supertiler.pojo;
 
 import java.awt.image.Raster;
 import java.io.FileOutputStream;
@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.parisoft.supertiler.Obj.LARGE_SIZE;
-import static com.parisoft.supertiler.Obj.SMALL_SIZE;
+import static com.parisoft.supertiler.pojo.Obj.LARGE_SIZE;
+import static com.parisoft.supertiler.pojo.Obj.SMALL_SIZE;
 import static com.parisoft.supertiler.SuperTiler.applyLarge;
 import static com.parisoft.supertiler.SuperTiler.applySmall;
 import static com.parisoft.supertiler.SuperTiler.metatileHeight;
@@ -16,14 +16,14 @@ import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
 
-class Frame {
+public class Frame {
 
     private List<BigTile> largeTiles = new ArrayList<>();
     private List<BigTile> smallTiles = new ArrayList<>();
     private List<Obj> metatile = new ArrayList<>();
     private int x, y;
 
-    Frame(Raster img, int x, int y) {
+    public Frame(Raster img, int x, int y) {
         this.x = x;
         this.y = y;
 
@@ -94,7 +94,7 @@ class Frame {
         }
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return largeTiles.isEmpty() && smallTiles.isEmpty();
     }
 
@@ -107,19 +107,19 @@ class Frame {
         }
     }
 
-    void createSmallMetatiles() {
+    public void createSmallMetatiles() {
         if (applySmall) {
             createMetatiles(smallTiles, SMALL_SIZE);
         }
     }
 
-    void createLargeMetatiles() {
+    public void createLargeMetatiles() {
         if (applyLarge) {
             createMetatiles(largeTiles, LARGE_SIZE);
         }
     }
 
-    void write(FileOutputStream output) throws IOException {
+    public void write(FileOutputStream output) throws IOException {
         for (Obj obj : metatile) {
             obj.write(output);
         }
