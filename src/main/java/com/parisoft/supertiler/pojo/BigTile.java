@@ -24,9 +24,7 @@ class BigTile {
         this.tiles = new Tile[len][len];
 
         for (int i = 0; i < len; i++) {
-            for (int j = 0; j < len; j++) {
-                this.tiles[i][j] = tiles[row + i][col + j];
-            }
+            System.arraycopy(tiles[row + i], col, this.tiles[i], 0, len);
         }
     }
 

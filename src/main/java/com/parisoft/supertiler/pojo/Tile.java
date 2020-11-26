@@ -47,7 +47,7 @@ public class Tile {
         return IntStream.range(0, pixels.length).allMatch(row -> Arrays.equals(this.pixels[row], ((Tile) other).pixels[row]));
     }
 
-    boolean isEmpty() {
+    private boolean isEmpty() {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 if (this.pixels[row][col] != 0) {
@@ -105,7 +105,7 @@ public class Tile {
         }
     }
 
-    public static boolean isNullOrEmpty(Tile tile) {
+    static boolean isNullOrEmpty(Tile tile) {
         return tile == null || tile.isEmpty();
     }
 }

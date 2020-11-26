@@ -15,11 +15,11 @@ class Obj {
     static final byte SMALL_SIZE = 0;
     static final byte LARGE_SIZE = 2;
 
-    byte x;
-    byte y;
-    byte tile;
-    byte attr;
-    byte size;
+    private byte x;
+    private byte y;
+    private byte tile;
+    private byte attr;
+    private byte size;
 
     Obj(byte x, byte y, byte tile, byte size, byte attr) {
         this.x = x;

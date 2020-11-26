@@ -16,14 +16,14 @@ import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
 
-public class Frame {
+public class MetaTile {
 
     private List<BigTile> largeTiles = new ArrayList<>();
     private List<BigTile> smallTiles = new ArrayList<>();
     private List<Obj> metatile = new ArrayList<>();
     private int x, y;
 
-    public Frame(Raster img, int x, int y) {
+    public MetaTile(Raster img, int x, int y) {
         this.x = x;
         this.y = y;
 
@@ -107,15 +107,13 @@ public class Frame {
         }
     }
 
-    public void createSmallMetatiles() {
-        if (applySmall) {
-            createMetatiles(smallTiles, SMALL_SIZE);
-        }
-    }
-
-    public void createLargeMetatiles() {
+    public void build() {
         if (applyLarge) {
             createMetatiles(largeTiles, LARGE_SIZE);
+        }
+
+        if (applySmall) {
+            createMetatiles(smallTiles, SMALL_SIZE);
         }
     }
 
