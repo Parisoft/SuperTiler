@@ -4,10 +4,10 @@ import java.awt.image.Raster;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.stream.IntStream;
 
 import static com.parisoft.supertiler.SuperTiler.bpp;
-import static java.lang.Math.pow;
 
 public class Tile {
 
@@ -23,8 +23,12 @@ public class Tile {
 
                 pixels[row][col] = pixel;
 
-                for (int p = 0; p < bpp; p++) {
-                    planes[row][p] |= ((pixel & (byte) pow(2, p)) >> p) << (7 - col);
+                BitSet bits = BitSet.valueOf(new byte[]{pixel});
+
+                for (int bp = 0; bp < bpp; bp++) {
+                    if (bits.get(bp)) {
+                        planes[row][bp] |= 1 << (7 - col);
+                    }
                 }
             }
         }
