@@ -31,6 +31,8 @@ public class SuperTiler {
     public static final String ARG_TILESIZE = "tilesize";
     public static final String ARG_APPLYSMALL = "applysmall";
     public static final String ARG_APPLYLARGE = "applylarge";
+    public static final String ARG_NO_DISCARD_REDUNDANT = "nodiscard";
+    public static final String ARG_NO_DISCARD_FLIP = "noflip";
     public static final String ARG_PALNUM = "palnum";
     public static final String ARG_PRIORITY = "priority";
     public static final String ARG_XOFF = "xoff";
@@ -50,8 +52,10 @@ public class SuperTiler {
     public static byte objTileOff;
     public static boolean applySmall;
     public static boolean applyLarge;
-    public static byte metatileWidth;
-    public static byte metatileHeight;
+    public static boolean discardRedundant;
+    public static boolean discardFlip;
+    public static int metatileWidth;
+    public static int metatileHeight;
     public static Namespace namespace;
     public static Tile[][] tileset;
 
@@ -75,8 +79,10 @@ public class SuperTiler {
         objTileOff = getByte(ARG_TILEOFF);
         applySmall = getBool(ARG_APPLYSMALL);
         applyLarge = getBool(ARG_APPLYLARGE);
-        metatileWidth = getByte(ARG_METAW);
-        metatileHeight = getByte(ARG_METAH);
+        discardRedundant = !getBool(ARG_NO_DISCARD_REDUNDANT);
+        discardFlip = !getBool(ARG_NO_DISCARD_FLIP);
+        metatileWidth = getInt(ARG_METAW);
+        metatileHeight = getInt(ARG_METAH);
         input = ImageIO.read(new File(namespace.getString(ARG_INPUT)));
 
         try {
@@ -99,12 +105,16 @@ public class SuperTiler {
     }
 
     private static byte getByte(String arg) {
+        return getInt(arg).byteValue();
+    }
+
+    private static Integer getInt(String arg){
         Integer anInt = namespace.getInt(arg);
 
         if (anInt == null) {
             return 0;
         }
 
-        return anInt.byteValue();
+        return anInt;
     }
 }

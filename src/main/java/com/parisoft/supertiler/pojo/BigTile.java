@@ -9,6 +9,8 @@ import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.parisoft.supertiler.SuperTiler.discardFlip;
+import static com.parisoft.supertiler.SuperTiler.discardRedundant;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static com.parisoft.supertiler.SuperTiler.tileset;
 import static com.parisoft.supertiler.pojo.Obj.HORIZONTAL_MIRROR;
@@ -79,15 +81,15 @@ class BigTile {
                 .allMatch(row -> Stream.of(tiles[row]).allMatch(Objects::isNull));
     }
 
-    private boolean isHMirrorOf(BigTile other) {
+    private boolean isHFlipOf(BigTile other) {
         return match(other, Tile::isHMirrorOf);
     }
 
-    private boolean isVMirrorOf(BigTile other) {
+    private boolean isVFlipOf(BigTile other) {
         return match(other, Tile::isVMirrorOf);
     }
 
-    private boolean isHVMirrorOf(BigTile other) {
+    private boolean isHVFlipOf(BigTile other) {
         return match(other, Tile::isHVMirrorOf);
     }
 
@@ -131,19 +133,19 @@ class BigTile {
                     continue;
                 }
 
-                if (equals(view)) {
+                if (discardRedundant && equals(view)) {
                     return new Obj(xOff, yOff, tile, size, (byte) 0);
                 }
 
-                if (isHMirrorOf(view)) {
+                if (discardFlip && isHFlipOf(view)) {
                     return new Obj(xOff, yOff, tile, size, HORIZONTAL_MIRROR);
                 }
 
-                if (isVMirrorOf(view)) {
+                if (discardFlip && isVFlipOf(view)) {
                     return new Obj(xOff, yOff, tile, size, VERTICAL_MIRROR);
                 }
 
-                if (isHVMirrorOf(view)) {
+                if (discardFlip && isHVFlipOf(view)) {
                     return new Obj(xOff, yOff, tile, size, (byte) (HORIZONTAL_MIRROR | VERTICAL_MIRROR));
                 }
             }
@@ -192,19 +194,19 @@ class BigTile {
                     return new BG(tile, false, false);
                 }
 
-                if (equals(view)) {
+                if (discardRedundant && equals(view)) {
                     return new BG(tile, false, false);
                 }
 
-                if (isHMirrorOf(view)) {
+                if (discardFlip && isHFlipOf(view)) {
                     return new BG(tile, true, false);
                 }
 
-                if (isVMirrorOf(view)) {
+                if (discardFlip && isVFlipOf(view)) {
                     return new BG(tile, false, true);
                 }
 
-                if (isHVMirrorOf(view)) {
+                if (discardFlip && isHVFlipOf(view)) {
                     return new BG(tile, true, true);
                 }
             }

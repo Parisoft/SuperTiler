@@ -18,6 +18,8 @@ import static com.parisoft.supertiler.SuperTiler.ARG_METAH;
 import static com.parisoft.supertiler.SuperTiler.ARG_METATILE;
 import static com.parisoft.supertiler.SuperTiler.ARG_METAW;
 import static com.parisoft.supertiler.SuperTiler.ARG_MODE;
+import static com.parisoft.supertiler.SuperTiler.ARG_NO_DISCARD_FLIP;
+import static com.parisoft.supertiler.SuperTiler.ARG_NO_DISCARD_REDUNDANT;
 import static com.parisoft.supertiler.SuperTiler.ARG_PALETTE;
 import static com.parisoft.supertiler.SuperTiler.ARG_PALNUM;
 import static com.parisoft.supertiler.SuperTiler.ARG_PRIORITY;
@@ -33,7 +35,7 @@ public class SpriteCmd implements Cmd {
     @Override
     @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection", "ConstantConditions"})
     public void execute() throws IOException {
-        SuperTiler.tileset = new Tile[16][16];
+        SuperTiler.tileset = new Tile[2 * 16][16];
 
         MetaTiles metaTiles = new MetaTiles();
 
@@ -69,11 +71,13 @@ public class SpriteCmd implements Cmd {
                               + "3 = 16x16 and 32x32 sprites" + System.lineSeparator()
                               + "4 = 16x16 and 64x64 sprites" + System.lineSeparator()
                               + "5 = 32x32 and 64x64 sprites");
-        sprite.addArgument("-S", "--" + ARG_APPLYSMALL).nargs("?").required(false).type(Boolean.class).setDefault(true)
+        sprite.addArgument("-S", "--" + ARG_APPLYSMALL).nargs("?").required(false).type(Boolean.class).setDefault(true).setConst(true)
                 .help("If " + ARG_APPLYLARGE + " is not set, all tiles size are the one define in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES only)");
-        sprite.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false)
+        sprite.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true)
                 .help("When " + ARG_MODE + " is snes, SuperTiler will first scan for large tiles defined in " + ARG_TILESIZE + " then, if " + ARG_APPLYSMALL + " is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
                               + "When " + ARG_MODE + " is nes, tiles are 8x16");
+        sprite.addArgument("-D", "--" + ARG_NO_DISCARD_REDUNDANT).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Don't discard redundant tiles");
+        sprite.addArgument("-F", "--" + ARG_NO_DISCARD_FLIP).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Don't discard using tile flipping");
         sprite.addArgument("--" + ARG_PALNUM).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5, 6, 7).setDefault(0).help("Object " + ARG_PALETTE + " number");
         sprite.addArgument("--" + ARG_PRIORITY).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3).setDefault(2).help("Object " + ARG_PRIORITY + " (SNES only)");
         sprite.addArgument("--" + ARG_TILESETNUM).nargs("?").required(false).type(Integer.class).choices(0, 1).setDefault(0).help("Object " + ARG_TILESET + " number (SNES only)");
