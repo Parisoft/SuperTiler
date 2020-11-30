@@ -1,6 +1,5 @@
 package com.parisoft.supertiler.pojo;
 
-import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,12 +7,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.parisoft.supertiler.SuperTiler.ARG_METATILE;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILEMAP;
 import static com.parisoft.supertiler.SuperTiler.applyLarge;
 import static com.parisoft.supertiler.SuperTiler.input;
 import static com.parisoft.supertiler.SuperTiler.namespace;
-import static com.parisoft.supertiler.SuperTiler.objSpSize;
 import static java.util.stream.Collectors.toList;
 
 public class TileMap {

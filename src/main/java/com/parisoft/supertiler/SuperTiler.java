@@ -3,8 +3,7 @@ package com.parisoft.supertiler;
 import com.parisoft.supertiler.cmd.BackgroundCmd;
 import com.parisoft.supertiler.cmd.Cmd;
 import com.parisoft.supertiler.cmd.SpriteCmd;
-import com.parisoft.supertiler.pojo.SpriteSize;
-import com.parisoft.supertiler.pojo.Tile;
+import com.parisoft.supertiler.pojo.TileSize;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Namespace;
@@ -39,8 +38,10 @@ public class SuperTiler {
     public static final String ARG_YOFF = "yoff";
     public static final String ARG_TILEOFF = "tileoff";
     public static final String ARG_TILESETNUM = "tilesetnum";
+    public static final String ARG_VERBOSE = "verbose";
 
     public static BufferedImage input;
+    public static boolean verbose;
     public static String mode;
     public static byte bpp;
     public static byte objPalNum;
@@ -48,8 +49,8 @@ public class SuperTiler {
     public static byte objTilesetNum;
     public static int objXOff;
     public static int objYOff;
-    public static SpriteSize objSpSize;
     public static int objTileOff;
+    public static TileSize tileSize;
     public static boolean applySmall;
     public static boolean applyLarge;
     public static boolean discardRedundant;
@@ -67,6 +68,7 @@ public class SuperTiler {
         BackgroundCmd.create(parser);
 
         namespace = parser.parseArgsOrFail(args);
+        verbose = getBool(ARG_VERBOSE);
         mode = namespace.getString(ARG_MODE);
         bpp = getByte(ARG_BPP);
         objPalNum = getByte(ARG_PALNUM);
@@ -74,8 +76,8 @@ public class SuperTiler {
         objTilesetNum = getByte(ARG_TILESETNUM);
         objXOff = getInt(ARG_XOFF);
         objYOff = getInt(ARG_YOFF);
-        objSpSize = SpriteSize.valueOf(namespace.getInt(ARG_TILESIZE));
         objTileOff = getInt(ARG_TILEOFF);
+        tileSize = TileSize.valueOf(namespace.getInt(ARG_TILESIZE));
         applySmall = getBool(ARG_APPLYSMALL);
         applyLarge = getBool(ARG_APPLYLARGE);
         discardRedundant = !getBool(ARG_NO_DISCARD_REDUNDANT);
@@ -87,10 +89,16 @@ public class SuperTiler {
         try {
             ((Cmd) namespace.get("cmd")).execute();
         } catch (Exception e) {
-            System.err.println("ERROR: ".concat(e.getMessage()));
-        }
+            if (e.getMessage() != null) {
+                System.err.println("ERROR: ".concat(e.getMessage()));
+            } else {
+                System.err.println("ERROR: ".concat(e.toString()));
+            }
 
-        System.out.println("Bye");
+            if (verbose) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static Boolean getBool(String arg) {
@@ -107,7 +115,7 @@ public class SuperTiler {
         return getInt(arg).byteValue();
     }
 
-    private static Integer getInt(String arg){
+    private static Integer getInt(String arg) {
         Integer anInt = namespace.getInt(arg);
 
         if (anInt == null) {

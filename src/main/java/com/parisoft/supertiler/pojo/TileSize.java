@@ -1,6 +1,6 @@
 package com.parisoft.supertiler.pojo;
 
-public enum SpriteSize {
+public enum TileSize {
 
     _8x8_16x6(8, 16),
     _8x8_32x32(8, 32),
@@ -13,13 +13,13 @@ public enum SpriteSize {
     byte small;
     byte large;
 
-    SpriteSize(int small, int large) {
+    TileSize(int small, int large) {
         this.name = String.format("%dx%d and %dx%d", small, small, large, large);
         this.small = (byte) small;
         this.large = (byte) large;
     }
 
-    public static SpriteSize valueOf(Integer index) {
+    public static TileSize valueOf(Integer index) {
         if (index == null) {
             return null;
         }

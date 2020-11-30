@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toList;
 public class TileSet extends AbstractSet<BigTile> {
 
     private List<BigTile> tiles = new ArrayList<>();
-    private List<Tile> flat;
+    private Tile[] array;
 
     public void addAll(MetaTile metaTile) {
         metaTile.largeTiles.forEach(this::add);
@@ -71,24 +71,41 @@ public class TileSet extends AbstractSet<BigTile> {
         int row;
 
         for (BigTile bigTile : tiles) {
+            // search row in tileset to add tile
             for (row = 0; row < tileset.size(); row++) {
                 if (16 - tileset.get(row).size() >= bigTile.getWidth() / 8) {
                     break;
                 }
             }
 
-            bigTile.index.set(row * 16 + tileset.size() > row ? tileset.size() : 0);
+            // compute tile index
+            if (tileset.size() <= row) {
+                bigTile.index.set(row * 16);
+            } else {
+                bigTile.index.set(row * 16 + tileset.get(row).size());
+            }
 
-            for (Tile[] tile : bigTile.tiles) {
-                if (tileset.size() <= row) {
+            // add empty row to tileset
+            for (int i = 0; i < bigTile.getHeight() / 8; i++) {
+                if (row + i >= tileset.size()) {
                     tileset.add(new ArrayList<>(16));
                 }
+            }
 
-                tileset.get(row).addAll(Arrays.asList(tile));
+            // add tile to tileset
+            for (Tile[] tile : bigTile.tiles) {
+                tileset.get(row++).addAll(Arrays.asList(tile));
             }
         }
 
-        flat = tileset.stream().flatMap(List::stream).collect(toList());
+        // fill empty spaces
+        for (int r = 0; r < tileset.size() - 1; r++) {
+            for (int c = tileset.get(r).size(); c < 16; c++) {
+                tileset.get(r).add(Tile.EMPTY);
+            }
+        }
+
+        array = tileset.stream().flatMap(List::stream).toArray(Tile[]::new);
     }
 
     public void write() throws IOException {
@@ -96,7 +113,7 @@ public class TileSet extends AbstractSet<BigTile> {
 
         if (tilesetPath != null) {
             try (FileOutputStream output = new FileOutputStream(new File(tilesetPath))) {
-                for (Tile tile : flat) {
+                for (Tile tile : array) {
                     tile.write(output);
                 }
             }

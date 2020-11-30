@@ -4,20 +4,20 @@ import java.awt.image.Raster;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.parisoft.supertiler.SuperTiler.objSpSize;
+import static com.parisoft.supertiler.SuperTiler.tileSize;
 import static java.util.Collections.emptyList;
 
 class BigTile {
 
     Tile[][] tiles;
-    AtomicReference<Integer> index;
-    boolean vFlip;
-    boolean hFlip;
+    AtomicInteger index = new AtomicInteger(0);
+    boolean vFlip = false;
+    boolean hFlip = false;
     int x;
     int y;
 
@@ -101,7 +101,7 @@ class BigTile {
 
     List<BigTile> split() {
         List<BigTile> smallTiles = new ArrayList<>();
-        byte smallLen = (byte) (objSpSize.small / 8);
+        byte smallLen = (byte) (tileSize.small / 8);
 
         for (int row = 0; row <= tiles.length - smallLen; row += smallLen) {
             for (int col = 0; col <= tiles[row].length - smallLen; col += smallLen) {
@@ -117,7 +117,7 @@ class BigTile {
             }
         }
 
-        if (smallTiles.size() > objSpSize.large / objSpSize.small) {
+        if (smallTiles.size() > getWidth() * getHeight() / 128) {
             return emptyList();
         }
 
@@ -129,7 +129,7 @@ class BigTile {
             return null;
         }
 
-        return new Obj(xOff, yOff, index.get().byteValue(), size, hFlip, vFlip);
+        return new Obj(xOff, yOff, index.get(), size, hFlip, vFlip);
     }
 
     BG toBG() {

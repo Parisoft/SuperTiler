@@ -12,7 +12,7 @@ import static com.parisoft.supertiler.SuperTiler.applyLarge;
 import static com.parisoft.supertiler.SuperTiler.applySmall;
 import static com.parisoft.supertiler.SuperTiler.metatileHeight;
 import static com.parisoft.supertiler.SuperTiler.metatileWidth;
-import static com.parisoft.supertiler.SuperTiler.objSpSize;
+import static com.parisoft.supertiler.SuperTiler.tileSize;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
 
@@ -28,19 +28,19 @@ public class MetaTile {
         this.y = y;
 
         if (applyLarge && applySmall) {
-            for (y = this.y; y < this.y + metatileHeight; y += objSpSize.large) {
-                for (x = this.x; x < this.x + metatileWidth; x += objSpSize.large) {
+            for (y = this.y; y < this.y + metatileHeight; y += tileSize.large) {
+                for (x = this.x; x < this.x + metatileWidth; x += tileSize.large) {
                     BigTile largeTile;
 
                     try {
-                        largeTile = new BigTile(objSpSize.large, img, x, y);
+                        largeTile = new BigTile(tileSize.large, img, x, y);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        for (int sy = y; sy < y + objSpSize.large; sy += objSpSize.small) {
-                            for (int sx = x; sx < x + objSpSize.large; sx += objSpSize.small) {
+                        for (int sy = y; sy < y + tileSize.large; sy += tileSize.small) {
+                            for (int sx = x; sx < x + tileSize.large; sx += tileSize.small) {
                                 BigTile smallTile;
 
                                 try {
-                                    smallTile = new BigTile(objSpSize.small, img, sx, sy);
+                                    smallTile = new BigTile(tileSize.small, img, sx, sy);
                                 } catch (ArrayIndexOutOfBoundsException ignore) {
                                     continue;
                                 }
@@ -68,7 +68,7 @@ public class MetaTile {
                 }
             }
         } else {
-            byte tilePixels = applyLarge ? objSpSize.large : objSpSize.small;
+            byte tilePixels = applyLarge ? tileSize.large : tileSize.small;
 
             for (y = this.y; y < this.y + metatileHeight; y += tilePixels) {
                 for (x = this.x; x < this.x + metatileWidth; x += tilePixels) {

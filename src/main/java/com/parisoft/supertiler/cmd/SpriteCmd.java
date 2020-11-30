@@ -24,6 +24,7 @@ import static com.parisoft.supertiler.SuperTiler.ARG_TILEOFF;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILESET;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILESETNUM;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILESIZE;
+import static com.parisoft.supertiler.SuperTiler.ARG_VERBOSE;
 import static com.parisoft.supertiler.SuperTiler.ARG_XOFF;
 import static com.parisoft.supertiler.SuperTiler.ARG_YOFF;
 
@@ -78,5 +79,6 @@ public class SpriteCmd implements Cmd {
         sprite.addArgument("-X", "--" + ARG_XOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object X offset");
         sprite.addArgument("-Y", "--" + ARG_YOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object Y offset");
         sprite.addArgument("-T", "--" + ARG_TILEOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object tile offset");
+        sprite.addArgument("-v", "--"+ARG_VERBOSE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Enable verbose error output");
     }
 }
