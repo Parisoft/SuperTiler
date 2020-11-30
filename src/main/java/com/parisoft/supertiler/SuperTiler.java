@@ -46,10 +46,10 @@ public class SuperTiler {
     public static byte objPalNum;
     public static byte objPriority;
     public static byte objTilesetNum;
-    public static byte objXOff;
-    public static byte objYOff;
+    public static int objXOff;
+    public static int objYOff;
     public static SpriteSize objSpSize;
-    public static byte objTileOff;
+    public static int objTileOff;
     public static boolean applySmall;
     public static boolean applyLarge;
     public static boolean discardRedundant;
@@ -57,7 +57,6 @@ public class SuperTiler {
     public static int metatileWidth;
     public static int metatileHeight;
     public static Namespace namespace;
-    public static Tile[][] tileset;
 
     public static void main(String[] args) throws IOException {
         ArgumentParser parser = ArgumentParsers.newFor("supertiler-" + VERSION + ".jar")
@@ -73,10 +72,10 @@ public class SuperTiler {
         objPalNum = getByte(ARG_PALNUM);
         objPriority = getByte(ARG_PRIORITY);
         objTilesetNum = getByte(ARG_TILESETNUM);
-        objXOff = getByte(ARG_XOFF);
-        objYOff = getByte(ARG_YOFF);
+        objXOff = getInt(ARG_XOFF);
+        objYOff = getInt(ARG_YOFF);
         objSpSize = SpriteSize.valueOf(namespace.getInt(ARG_TILESIZE));
-        objTileOff = getByte(ARG_TILEOFF);
+        objTileOff = getInt(ARG_TILEOFF);
         applySmall = getBool(ARG_APPLYSMALL);
         applyLarge = getBool(ARG_APPLYLARGE);
         discardRedundant = !getBool(ARG_NO_DISCARD_REDUNDANT);

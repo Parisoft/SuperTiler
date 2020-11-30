@@ -18,8 +18,9 @@ import static java.util.stream.Collectors.toList;
 
 public class TileMap {
 
-    private List<BigTile> tiles = new ArrayList<>();
     private List<BG> tilemap;
+    private TileSet tileset;
+    private List<BigTile> tiles = new ArrayList<>();
 
     public TileMap() {
         WritableRaster img = input.getRaster();
@@ -43,7 +44,11 @@ public class TileMap {
             }
         }
 
-        tilemap = tiles.stream().map(BigTile::getBG).collect(toList());
+        tileset = new TileSet();
+        tileset.addAll(tiles);
+        tileset.build();
+
+        tilemap = tiles.stream().map(BigTile::toBG).collect(toList());
     }
 
     public boolean isEmpty() {
@@ -51,6 +56,8 @@ public class TileMap {
     }
 
     public void write() throws IOException {
+        tileset.write();
+
         String metatile = namespace.getString(ARG_TILEMAP);
 
         if (metatile != null) {

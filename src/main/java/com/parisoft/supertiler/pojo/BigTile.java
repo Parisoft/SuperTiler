@@ -2,24 +2,22 @@ package com.parisoft.supertiler.pojo;
 
 import java.awt.image.Raster;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiPredicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.parisoft.supertiler.SuperTiler.discardFlip;
-import static com.parisoft.supertiler.SuperTiler.discardRedundant;
 import static com.parisoft.supertiler.SuperTiler.objSpSize;
-import static com.parisoft.supertiler.SuperTiler.tileset;
-import static com.parisoft.supertiler.pojo.Obj.HORIZONTAL_MIRROR;
-import static com.parisoft.supertiler.pojo.Obj.VERTICAL_MIRROR;
 import static java.util.Collections.emptyList;
 
 class BigTile {
 
-    private Tile[][] tiles;
+    Tile[][] tiles;
+    AtomicReference<Integer> index;
+    boolean vFlip;
+    boolean hFlip;
     int x;
     int y;
 
@@ -41,6 +39,14 @@ class BigTile {
                 tiles[row][col] = new Tile(img, x + col * 8, y + row * 8);
             }
         }
+    }
+
+    int getWidth() {
+        return tiles[0].length * 8;
+    }
+
+    int getHeight() {
+        return tiles.length * 8;
     }
 
     private boolean match(BigTile other, BiPredicate<Tile, Tile> predicate) {
@@ -81,15 +87,15 @@ class BigTile {
                 .allMatch(row -> Stream.of(tiles[row]).allMatch(Objects::isNull));
     }
 
-    private boolean isHFlipOf(BigTile other) {
+    boolean isHFlipOf(BigTile other) {
         return match(other, Tile::isHMirrorOf);
     }
 
-    private boolean isVFlipOf(BigTile other) {
+    boolean isVFlipOf(BigTile other) {
         return match(other, Tile::isVMirrorOf);
     }
 
-    private boolean isHVFlipOf(BigTile other) {
+    boolean isHVFlipOf(BigTile other) {
         return match(other, Tile::isHVMirrorOf);
     }
 
@@ -118,101 +124,20 @@ class BigTile {
         return smallTiles;
     }
 
-    Obj getObj(byte xOff, byte yOff, byte size) {
+    Obj toObj(byte xOff, byte yOff, byte size) {
         if (isEmpty()) {
             return null;
         }
 
-        // Search for a clone tile in tileset
-        for (int row = 0; row <= tileset.length - tiles.length; row++) {
-            for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
-                byte tile = (byte) (row * tileset[row].length + col);
-                BigTile view = new BigTile(tileset, tiles.length, row, col);
-
-                if (view.isEmpty()) {
-                    continue;
-                }
-
-                if (discardRedundant && equals(view)) {
-                    return new Obj(xOff, yOff, tile, size, (byte) 0);
-                }
-
-                if (discardFlip && isHFlipOf(view)) {
-                    return new Obj(xOff, yOff, tile, size, HORIZONTAL_MIRROR);
-                }
-
-                if (discardFlip && isVFlipOf(view)) {
-                    return new Obj(xOff, yOff, tile, size, VERTICAL_MIRROR);
-                }
-
-                if (discardFlip && isHVFlipOf(view)) {
-                    return new Obj(xOff, yOff, tile, size, (byte) (HORIZONTAL_MIRROR | VERTICAL_MIRROR));
-                }
-            }
-        }
-
-        //If didnt find, search for an empty slot to insert it
-        for (int row = 0; row <= tileset.length - tiles.length; row++) {
-            for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
-                if (Tile.isNullOrEmpty(tileset[row][col])) {
-                    //FIXME save on Tile from tileset which size it is, so small tiles dont overlap larger ones
-//                    if (tiles.length == 1 || new BigTile(tileset, tiles.length, row, col).isEmpty()) {
-                    byte tile = (byte) (row * tileset[row].length + col);
-
-                    for (Tile[] rowOfTiles : tiles) {
-                        System.arraycopy(rowOfTiles, 0, tileset[row], col, rowOfTiles.length);
-                        Arrays.fill(tileset[row], col + rowOfTiles.length, tileset[row].length, Tile.EMPTY);
-                        row++;
-                    }
-
-                    return new Obj(xOff, yOff, tile, size, (byte) 0);
-//                    }
-                }
-            }
-        }
-
-        throw new IllegalStateException("BigTile does not fit in tileset");
+        return new Obj(xOff, yOff, index.get().byteValue(), size, hFlip, vFlip);
     }
 
-    BG getBG() {
+    BG toBG() {
         if (isNull()) {
             return null;
         }
 
-        // Search for a clone tile in tileset
-        for (int row = 0; row <= tileset.length - tiles.length; row++) {
-            for (int col = 0; col <= tileset[row].length - tiles[0].length; col++) {
-                int tile = row * tileset[row].length + col;
-                BigTile view = new BigTile(tileset, tiles.length, row, col);
-
-                if (view.isNull()) { // reach the end of tileset, just insert this tile
-                    for (Tile[] rowOfTiles : tiles) {
-                        System.arraycopy(rowOfTiles, 0, tileset[row], col, rowOfTiles.length);
-                        row++;
-                    }
-
-                    return new BG(tile, false, false);
-                }
-
-                if (discardRedundant && equals(view)) {
-                    return new BG(tile, false, false);
-                }
-
-                if (discardFlip && isHFlipOf(view)) {
-                    return new BG(tile, true, false);
-                }
-
-                if (discardFlip && isVFlipOf(view)) {
-                    return new BG(tile, false, true);
-                }
-
-                if (discardFlip && isHVFlipOf(view)) {
-                    return new BG(tile, true, true);
-                }
-            }
-        }
-
-        throw new IllegalStateException("BigTile does not fit in tileset");
+        return new BG(index.get(), hFlip, vFlip);
     }
 }
 

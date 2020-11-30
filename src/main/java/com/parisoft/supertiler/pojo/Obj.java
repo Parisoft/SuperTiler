@@ -10,8 +10,8 @@ import static com.parisoft.supertiler.SuperTiler.objTilesetNum;
 
 class Obj {
 
-    static final byte VERTICAL_MIRROR = (byte) 0x80;
-    static final byte HORIZONTAL_MIRROR = 0x40;
+    static final byte VERTICAL_FLIP = (byte) 0x80;
+    static final byte HORIZONTAL_FLIP = 0x40;
     static final byte SMALL_SIZE = 0;
     static final byte LARGE_SIZE = 2;
 
@@ -21,12 +21,20 @@ class Obj {
     private byte attr;
     private byte size;
 
-    Obj(byte x, byte y, byte tile, byte size, byte attr) {
+    Obj(byte x, byte y, int tile, byte size, boolean hFlip, boolean vFlip) {
+        if (tile < 0x100) {
+            this.tile = (byte) tile;
+        } else if (tile < 0x200 && objTilesetNum == 0) {
+            this.tile = (byte) (tile - 0x100);
+            this.attr = 1;
+        } else {
+            throw new IndexOutOfBoundsException("Sprite tileset cannot have more than 512 tiles");
+        }
+
         this.x = x;
         this.y = y;
-        this.tile = tile;
         this.size = size;
-        this.attr = (byte) (attr | (objPriority << 4) | (objPalNum << 1) | objTilesetNum);
+        this.attr = (byte) ((vFlip ? VERTICAL_FLIP : 0) | (hFlip ? HORIZONTAL_FLIP : 0) | (objPriority << 4) | (objPalNum << 1) | objTilesetNum);
     }
 
     void write(FileOutputStream output) throws IOException {

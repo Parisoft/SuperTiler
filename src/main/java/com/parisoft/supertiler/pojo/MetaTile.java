@@ -18,10 +18,10 @@ import static com.parisoft.supertiler.SuperTiler.objYOff;
 
 public class MetaTile {
 
-    private List<BigTile> largeTiles = new ArrayList<>();
-    private List<BigTile> smallTiles = new ArrayList<>();
-    private List<Obj> metatile = new ArrayList<>();
     private int x, y;
+    private List<Obj> metatile = new ArrayList<>();
+    List<BigTile> largeTiles = new ArrayList<>();
+    List<BigTile> smallTiles = new ArrayList<>();
 
     public MetaTile(Raster img, int x, int y) {
         this.x = x;
@@ -102,8 +102,7 @@ public class MetaTile {
         for (BigTile tile : tiles) {
             byte row = (byte) (tile.y - this.y);
             byte col = (byte) (tile.x - this.x);
-            Obj obj = tile.getObj((byte) (objXOff + col), (byte) (objYOff + row), size);
-            metatile.add(obj);
+            metatile.add(tile.toObj((byte) (objXOff + col), (byte) (objYOff + row), size));
         }
     }
 
