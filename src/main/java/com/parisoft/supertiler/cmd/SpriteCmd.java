@@ -6,10 +6,12 @@ import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Subparser;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import static com.parisoft.supertiler.SuperTiler.ARG_APPLYLARGE;
 import static com.parisoft.supertiler.SuperTiler.ARG_APPLYSMALL;
 import static com.parisoft.supertiler.SuperTiler.ARG_BPP;
+import static com.parisoft.supertiler.SuperTiler.ARG_COLORMAP;
 import static com.parisoft.supertiler.SuperTiler.ARG_INPUT;
 import static com.parisoft.supertiler.SuperTiler.ARG_METAH;
 import static com.parisoft.supertiler.SuperTiler.ARG_METATILE;
@@ -27,6 +29,7 @@ import static com.parisoft.supertiler.SuperTiler.ARG_TILESIZE;
 import static com.parisoft.supertiler.SuperTiler.ARG_VERBOSE;
 import static com.parisoft.supertiler.SuperTiler.ARG_XOFF;
 import static com.parisoft.supertiler.SuperTiler.ARG_YOFF;
+import static java.util.stream.Collectors.toList;
 
 public class SpriteCmd implements Cmd {
 
@@ -43,6 +46,7 @@ public class SpriteCmd implements Cmd {
         Palettes.write();
     }
 
+    @SuppressWarnings("Duplicates")
     public static void create(ArgumentParser parser) {
         Subparser sprite = parser.addSubparsers()
                 .addParser("sprite", true)
@@ -79,6 +83,7 @@ public class SpriteCmd implements Cmd {
         sprite.addArgument("-X", "--" + ARG_XOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object X offset");
         sprite.addArgument("-Y", "--" + ARG_YOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object Y offset");
         sprite.addArgument("-T", "--" + ARG_TILEOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object tile offset");
+        sprite.addArgument("--"+ARG_COLORMAP).nargs("+").required(false).type(Integer.class).metavar("C").setDefault(IntStream.range(0, 256).boxed().collect(toList())).help("Rearrange colors from palette");
         sprite.addArgument("-v", "--"+ARG_VERBOSE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Enable verbose error output");
     }
 }

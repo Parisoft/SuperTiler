@@ -5,8 +5,11 @@ import com.parisoft.supertiler.util.Palettes;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.Subparser;
 
+import java.util.stream.IntStream;
+
 import static com.parisoft.supertiler.SuperTiler.ARG_APPLYLARGE;
 import static com.parisoft.supertiler.SuperTiler.ARG_BPP;
+import static com.parisoft.supertiler.SuperTiler.ARG_COLORMAP;
 import static com.parisoft.supertiler.SuperTiler.ARG_INPUT;
 import static com.parisoft.supertiler.SuperTiler.ARG_MODE;
 import static com.parisoft.supertiler.SuperTiler.ARG_NO_DISCARD_FLIP;
@@ -18,6 +21,7 @@ import static com.parisoft.supertiler.SuperTiler.ARG_TILEMAP;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILEOFF;
 import static com.parisoft.supertiler.SuperTiler.ARG_TILESET;
 import static com.parisoft.supertiler.SuperTiler.ARG_VERBOSE;
+import static java.util.stream.Collectors.toList;
 
 public class BackgroundCmd implements Cmd {
 
@@ -53,6 +57,7 @@ public class BackgroundCmd implements Cmd {
         bg.addArgument("--" + ARG_PALNUM).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5, 6, 7).setDefault(0).help("Background " + ARG_PALETTE + " number");
         bg.addArgument("--" + ARG_PRIORITY).nargs("?").required(false).type(Integer.class).choices(0, 1).setDefault(0).help("Background " + ARG_PRIORITY + " (SNES only)");
         bg.addArgument("-T", "--" + ARG_TILEOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Background tile offset");
+        bg.addArgument("--"+ARG_COLORMAP).nargs("+").required(false).type(Integer.class).metavar("C").setDefault(IntStream.range(0, 256).boxed().collect(toList())).help("Rearrange colors from palette");
         bg.addArgument("-v", "--"+ARG_VERBOSE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Enable verbose error output");
     }
 }

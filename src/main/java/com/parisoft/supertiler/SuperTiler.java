@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @SuppressWarnings({"Duplicates", "WeakerAccess"})
 public class SuperTiler {
@@ -39,6 +40,7 @@ public class SuperTiler {
     public static final String ARG_TILEOFF = "tileoff";
     public static final String ARG_TILESETNUM = "tilesetnum";
     public static final String ARG_VERBOSE = "verbose";
+    public static final String ARG_COLORMAP = "colormap";
 
     public static BufferedImage input;
     public static boolean verbose;
@@ -57,6 +59,7 @@ public class SuperTiler {
     public static boolean discardFlip;
     public static int metatileWidth;
     public static int metatileHeight;
+    public static List<Integer> colorMap;
     public static Namespace namespace;
 
     public static void main(String[] args) throws IOException {
@@ -84,6 +87,7 @@ public class SuperTiler {
         discardFlip = !getBool(ARG_NO_DISCARD_FLIP);
         metatileWidth = getInt(ARG_METAW);
         metatileHeight = getInt(ARG_METAH);
+        colorMap = namespace.getList(ARG_COLORMAP);
         input = ImageIO.read(new File(namespace.getString(ARG_INPUT)));
 
         try {

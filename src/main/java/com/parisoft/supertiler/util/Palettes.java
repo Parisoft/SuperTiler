@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static com.parisoft.supertiler.SuperTiler.ARG_PALETTE;
+import static com.parisoft.supertiler.SuperTiler.colorMap;
 import static com.parisoft.supertiler.SuperTiler.input;
 import static com.parisoft.supertiler.SuperTiler.namespace;
 import static java.nio.file.StandardOpenOption.CREATE;
@@ -23,6 +24,18 @@ public class Palettes {
 
             colorModel.getRGBs(rgb32);
 
+            // remap
+            for (int i = 0; i < rgb32.length; i++) {
+                int r = colorMap.get(i);
+
+                if (r > i) {
+                    int tmp = rgb32[i];
+                    rgb32[i] = rgb32[r];
+                    rgb32[r] = tmp;
+                }
+            }
+
+            // convert
             for (int i = 0; i < rgb32.length; i++) {
                 int c = rgb32[i];
                 int r = (c & 0x00f80000) >> 19;
