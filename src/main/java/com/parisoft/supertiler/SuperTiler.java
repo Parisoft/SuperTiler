@@ -3,6 +3,7 @@ package com.parisoft.supertiler;
 import com.parisoft.supertiler.cmd.BackgroundCmd;
 import com.parisoft.supertiler.cmd.Cmd;
 import com.parisoft.supertiler.cmd.SpriteCmd;
+import com.parisoft.supertiler.pojo.Mode;
 import com.parisoft.supertiler.pojo.TileSize;
 import net.sourceforge.argparse4j.ArgumentParsers;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -44,7 +45,7 @@ public class SuperTiler {
 
     public static BufferedImage input;
     public static boolean verbose;
-    public static String mode;
+    public static Mode mode;
     public static byte bpp;
     public static byte objPalNum;
     public static byte objPriority;
@@ -72,7 +73,7 @@ public class SuperTiler {
 
         namespace = parser.parseArgsOrFail(args);
         verbose = getBool(ARG_VERBOSE);
-        mode = namespace.getString(ARG_MODE);
+        mode = Mode.valueOf(namespace.getString(ARG_MODE).toUpperCase());
         bpp = getByte(ARG_BPP);
         objPalNum = getByte(ARG_PALNUM);
         objPriority = getByte(ARG_PRIORITY);

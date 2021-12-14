@@ -1,5 +1,6 @@
 package com.parisoft.supertiler.cmd;
 
+import com.parisoft.supertiler.pojo.Mode;
 import com.parisoft.supertiler.pojo.TileMap;
 import com.parisoft.supertiler.util.Palettes;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -49,7 +50,7 @@ public class BackgroundCmd implements Cmd {
         bg.addArgument("-t", "--" + ARG_TILESET).nargs("?").required(false).type(String.class).help("Output " + ARG_TILESET + " file");
         bg.addArgument("-p", "--" + ARG_PALETTE).nargs("?").required(false).type(String.class).help("Output " + ARG_PALETTE + " file");
         bg.addArgument("-m", "--" + ARG_TILEMAP).nargs("?").required(false).type(String.class).help("Output " + ARG_TILEMAP + " file");
-        bg.addArgument("-M", "--" + ARG_MODE).nargs("?").required(false).type(String.class).choices("snes", "nes").setDefault("snes").help("Mode for target console");
+        bg.addArgument("-M", "--" + ARG_MODE).nargs("?").required(false).type(Mode.class).choices(Mode.values()).setDefault(Mode.SNES).help("Mode for target console");
         bg.addArgument("-B", "--" + ARG_BPP).nargs("?").required(false).type(Integer.class).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
         bg.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Set tile size to 16x16 pixels");
         bg.addArgument("-D", "--"+ARG_NO_DISCARD_REDUNDANT).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Don't discard redundant tiles");

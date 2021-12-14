@@ -1,5 +1,6 @@
 package com.parisoft.supertiler.cmd;
 
+import com.parisoft.supertiler.pojo.Mode;
 import com.parisoft.supertiler.util.MetaTiles;
 import com.parisoft.supertiler.util.Palettes;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -58,7 +59,7 @@ public class SpriteCmd implements Cmd {
         sprite.addArgument("-t", "--" + ARG_TILESET).nargs("?").required(false).type(String.class).help("Output " + ARG_TILESET + " file");
         sprite.addArgument("-p", "--" + ARG_PALETTE).nargs("?").required(false).type(String.class).help("Output " + ARG_PALETTE + " file");
         sprite.addArgument("-m", "--" + ARG_METATILE).nargs("?").required(false).type(String.class).help("Prefix for " + ARG_METATILE + " files");
-        sprite.addArgument("-M", "--" + ARG_MODE).nargs("?").required(false).type(String.class).choices("snes", "nes").setDefault("snes").help("Mode for target console");
+        sprite.addArgument("-M", "--" + ARG_MODE).nargs("?").required(false).type(Mode.class).choices(Mode.values()).setDefault(Mode.SNES).help("Mode for target console");
         sprite.addArgument("-B", "--" + ARG_BPP).nargs("?").required(false).type(Integer.class).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
         sprite.addArgument("-W", "--" + ARG_METAW).nargs("?").required(false).type(Integer.class).help("Metatile width in pixels (default: image width)");
         sprite.addArgument("-H", "--" + ARG_METAH).nargs("?").required(false).type(Integer.class).help("Metatile height in pixels (default: image height)");
