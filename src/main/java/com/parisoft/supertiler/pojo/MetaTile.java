@@ -6,15 +6,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.parisoft.supertiler.pojo.Obj.LARGE_SIZE;
-import static com.parisoft.supertiler.pojo.Obj.SMALL_SIZE;
+import static com.parisoft.supertiler.SuperTiler.ARG_APPLYLARGE;
+import static com.parisoft.supertiler.SuperTiler.ARG_APPLYSMALL;
 import static com.parisoft.supertiler.SuperTiler.applyLarge;
 import static com.parisoft.supertiler.SuperTiler.applySmall;
+import static com.parisoft.supertiler.SuperTiler.input;
 import static com.parisoft.supertiler.SuperTiler.metatileHeight;
 import static com.parisoft.supertiler.SuperTiler.metatileWidth;
-import static com.parisoft.supertiler.SuperTiler.tileSize;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
+import static com.parisoft.supertiler.SuperTiler.tileSize;
+import static com.parisoft.supertiler.pojo.Obj.LARGE_SIZE;
+import static com.parisoft.supertiler.pojo.Obj.SMALL_SIZE;
 
 public class MetaTile {
 
@@ -26,6 +29,14 @@ public class MetaTile {
     public MetaTile(Raster img, int x, int y) {
         this.x = x;
         this.y = y;
+
+        if (metatileWidth == 0) {
+            metatileWidth = input.getWidth();
+        }
+
+        if (metatileHeight == 0) {
+            metatileHeight = input.getHeight();
+        }
 
         if (applyLarge && applySmall) {
             for (y = this.y; y < this.y + metatileHeight; y += tileSize.large) {
@@ -68,7 +79,15 @@ public class MetaTile {
                 }
             }
         } else {
-            byte tilePixels = applyLarge ? tileSize.large : tileSize.small;
+            byte tilePixels;
+
+            if (applyLarge) {
+                tilePixels = tileSize.large;
+            } else if (applySmall) {
+                tilePixels = tileSize.small;
+            } else {
+                throw new IllegalArgumentException(ARG_APPLYLARGE + " and " + ARG_APPLYSMALL + " are both false");
+            }
 
             for (y = this.y; y < this.y + metatileHeight; y += tilePixels) {
                 for (x = this.x; x < this.x + metatileWidth; x += tilePixels) {

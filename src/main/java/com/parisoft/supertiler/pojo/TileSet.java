@@ -14,7 +14,6 @@ import static com.parisoft.supertiler.SuperTiler.ARG_TILESET;
 import static com.parisoft.supertiler.SuperTiler.discardFlip;
 import static com.parisoft.supertiler.SuperTiler.discardRedundant;
 import static com.parisoft.supertiler.SuperTiler.namespace;
-import static java.util.stream.Collectors.toList;
 
 public class TileSet extends AbstractSet<BigTile> {
 

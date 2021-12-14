@@ -60,8 +60,8 @@ public class SpriteCmd implements Cmd {
         sprite.addArgument("-m", "--" + ARG_METATILE).nargs("?").required(false).type(String.class).help("Prefix for " + ARG_METATILE + " files");
         sprite.addArgument("-M", "--" + ARG_MODE).nargs("?").required(false).type(String.class).choices("snes", "nes").setDefault("snes").help("Mode for target console");
         sprite.addArgument("-B", "--" + ARG_BPP).nargs("?").required(false).type(Integer.class).choices(2, 4, 8).setDefault(4).help("Depth or number of colors per pixel");
-        sprite.addArgument("-W", "--" + ARG_METAW).nargs("?").required(false).type(Integer.class).setDefault(8).help("Metatile width in pixels");
-        sprite.addArgument("-H", "--" + ARG_METAH).nargs("?").required(false).type(Integer.class).setDefault(8).help("Metatile height in pixels");
+        sprite.addArgument("-W", "--" + ARG_METAW).nargs("?").required(false).type(Integer.class).help("Metatile width in pixels (default: image width)");
+        sprite.addArgument("-H", "--" + ARG_METAH).nargs("?").required(false).type(Integer.class).help("Metatile height in pixels (default: image height)");
         sprite.addArgument("-s", "--" + ARG_TILESIZE).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5).setDefault(0)
                 .help("Size of the sprites (SNES only):" + System.lineSeparator()
                               + "0 =  8x8  and 16x16 sprites" + System.lineSeparator()
@@ -71,7 +71,7 @@ public class SpriteCmd implements Cmd {
                               + "4 = 16x16 and 64x64 sprites" + System.lineSeparator()
                               + "5 = 32x32 and 64x64 sprites");
         sprite.addArgument("-S", "--" + ARG_APPLYSMALL).nargs("?").required(false).type(Boolean.class).setDefault(true).setConst(true)
-                .help("If " + ARG_APPLYLARGE + " is not set, all tiles size are the one define in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES only)");
+                .help("If " + ARG_APPLYLARGE + " is not set, all tiles are the smallest one defined in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES only)");
         sprite.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true)
                 .help("When " + ARG_MODE + " is snes, SuperTiler will first scan for large tiles defined in " + ARG_TILESIZE + " then, if " + ARG_APPLYSMALL + " is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
                               + "When " + ARG_MODE + " is nes, tiles are 8x16");

@@ -104,6 +104,11 @@ public class Tile {
                 }
             }
         }
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 8; j+=2) {
+//                output.write(pixels[i][j]|(pixels[i][j+1]<<4));
+//            }
+//        }
     }
 
     static boolean isNullOrEmpty(Tile tile) {
