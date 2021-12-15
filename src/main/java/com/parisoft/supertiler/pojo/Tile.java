@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 
 import static com.parisoft.supertiler.SuperTiler.bpp;
 import static com.parisoft.supertiler.SuperTiler.colorMap;
+import static com.parisoft.supertiler.SuperTiler.mode;
 
 public class Tile {
 
@@ -97,18 +98,29 @@ public class Tile {
     }
 
     public void write(FileOutputStream output) throws IOException {
-        for (int bp = 0; bp < bpp; bp += 2) {
-            for (int row = 0; row < 8; row++) {
-                for (int i = 0; i < 2; i++) {
-                    output.write(planes[row][bp + i]);
+        if (mode == Mode.GBA) {
+            if (bpp == 8) {
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j += 2) {
+                        output.write(pixels[i][j]);
+                    }
+                }
+            } else {//bpp == 4
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 8; j += 2) {
+                        output.write(pixels[i][j] | (pixels[i][j + 1] << 4));
+                    }
+                }
+            }
+        } else {
+            for (int bp = 0; bp < bpp; bp += 2) {
+                for (int row = 0; row < 8; row++) {
+                    for (int i = 0; i < 2; i++) {
+                        output.write(planes[row][bp + i]);
+                    }
                 }
             }
         }
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j+=2) {
-//                output.write(pixels[i][j]|(pixels[i][j+1]<<4));
-//            }
-//        }
     }
 
     static boolean isNullOrEmpty(Tile tile) {

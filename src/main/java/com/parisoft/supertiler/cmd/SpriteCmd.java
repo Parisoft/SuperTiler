@@ -64,7 +64,7 @@ public class SpriteCmd implements Cmd {
         sprite.addArgument("-W", "--" + ARG_METAW).nargs("?").required(false).type(Integer.class).help("Metatile width in pixels (default: image width)");
         sprite.addArgument("-H", "--" + ARG_METAH).nargs("?").required(false).type(Integer.class).help("Metatile height in pixels (default: image height)");
         sprite.addArgument("-s", "--" + ARG_TILESIZE).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5).setDefault(0)
-                .help("Size of the sprites (SNES only):" + System.lineSeparator()
+                .help("Size of the sprites (SNES and GBA):" + System.lineSeparator()
                               + "0 =  8x8  and 16x16 sprites" + System.lineSeparator()
                               + "1 =  8x8  and 32x32 sprites" + System.lineSeparator()
                               + "2 =  8x8  and 64x64 sprites" + System.lineSeparator()
@@ -72,14 +72,14 @@ public class SpriteCmd implements Cmd {
                               + "4 = 16x16 and 64x64 sprites" + System.lineSeparator()
                               + "5 = 32x32 and 64x64 sprites");
         sprite.addArgument("-S", "--" + ARG_APPLYSMALL).nargs("?").required(false).type(Boolean.class).setDefault(true).setConst(true)
-                .help("If " + ARG_APPLYLARGE + " is not set, all tiles are the smallest one defined in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES only)");
+                .help("If " + ARG_APPLYLARGE + " is not set, all tiles are the smallest one defined in " + ARG_TILESIZE + ". See applylarge when both are set. (SNES and GBA)");
         sprite.addArgument("-L", "--" + ARG_APPLYLARGE).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true)
-                .help("When " + ARG_MODE + " is snes, SuperTiler will first scan for large tiles defined in " + ARG_TILESIZE + " then, if " + ARG_APPLYSMALL + " is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
-                              + "When " + ARG_MODE + " is nes, tiles are 8x16");
+                .help("When " + ARG_MODE + " is SNES or GBA, SuperTiler will first scan for large tiles defined in " + ARG_TILESIZE + " then, if " + ARG_APPLYSMALL + " is set, it will replace the large tile for N small tiles if N <= large/small" + System.lineSeparator()
+                              + "When " + ARG_MODE + " is NES, tiles are 8x16");
         sprite.addArgument("-D", "--" + ARG_NO_DISCARD_REDUNDANT).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Don't discard redundant tiles");
         sprite.addArgument("-F", "--" + ARG_NO_DISCARD_FLIP).nargs("?").required(false).type(Boolean.class).setDefault(false).setConst(true).help("Don't discard using tile flipping");
         sprite.addArgument("--" + ARG_PALNUM).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3, 4, 5, 6, 7).setDefault(0).help("Object " + ARG_PALETTE + " number");
-        sprite.addArgument("--" + ARG_PRIORITY).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3).setDefault(2).help("Object " + ARG_PRIORITY + " (SNES only)");
+        sprite.addArgument("--" + ARG_PRIORITY).nargs("?").required(false).type(Integer.class).choices(0, 1, 2, 3).setDefault(2).help("Object " + ARG_PRIORITY + " (SNES and GBA)");
         sprite.addArgument("--" + ARG_TILESETNUM).nargs("?").required(false).type(Integer.class).choices(0, 1).setDefault(0).help("Object " + ARG_TILESET + " number (SNES only)");
         sprite.addArgument("-X", "--" + ARG_XOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object X offset");
         sprite.addArgument("-Y", "--" + ARG_YOFF).nargs("?").required(false).type(Integer.class).setDefault(0).help("Object Y offset");
