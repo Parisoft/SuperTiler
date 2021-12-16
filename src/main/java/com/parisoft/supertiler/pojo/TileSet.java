@@ -109,6 +109,13 @@ public class TileSet extends AbstractSet<BigTile> {
 
             array = tileset.stream().flatMap(List::stream).toArray(Tile[]::new);
         } else {//1D arrangement (linear)
+            int index = 0;
+
+            for (BigTile tile : tiles) {
+                tile.index.set(index);
+                index += tile.tiles.length * tile.tiles[0].length;
+            }
+
             array = tiles.stream()
                     .map(bigTile -> Arrays.stream(bigTile.tiles)
                             .flatMap(Arrays::stream)

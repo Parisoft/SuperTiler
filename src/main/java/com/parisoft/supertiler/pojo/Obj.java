@@ -52,7 +52,7 @@ class Obj {
                 }
 
                 this.tile = tile;
-                this.attr = (byte) ((hFlip ? GBA_HORIZONTAL_FLIP : 0) | (vFlip ? GBA_VERTICAL_FLIP : 0) | ((log2(size == SMALL_SIZE ? tileSize.small : tileSize.large) - 1) << 6));
+                this.attr = (byte) ((hFlip ? GBA_HORIZONTAL_FLIP : 0) | (vFlip ? GBA_VERTICAL_FLIP : 0) | ((log2(size == SMALL_SIZE ? tileSize.small : tileSize.large) - 3) << 6));
                 break;
 
             case NES:
@@ -75,7 +75,7 @@ class Obj {
                         0, 0 // dummy for alignment
                 });
                 break;
-                
+
             case NES:
                 //ToDo NES obj write
                 break;

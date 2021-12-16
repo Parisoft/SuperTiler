@@ -13,6 +13,7 @@ import static com.parisoft.supertiler.SuperTiler.applySmall;
 import static com.parisoft.supertiler.SuperTiler.input;
 import static com.parisoft.supertiler.SuperTiler.metatileHeight;
 import static com.parisoft.supertiler.SuperTiler.metatileWidth;
+import static com.parisoft.supertiler.SuperTiler.mode;
 import static com.parisoft.supertiler.SuperTiler.objXOff;
 import static com.parisoft.supertiler.SuperTiler.objYOff;
 import static com.parisoft.supertiler.SuperTiler.tileSize;
@@ -140,7 +141,9 @@ public class MetaTile {
             obj.write(output);
         }
 
-        output.write(0x80);//eof
+        if (mode != Mode.GBA) {
+            output.write(0x80);//eof
+        }
     }
 }
 
