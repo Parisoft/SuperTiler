@@ -139,5 +139,14 @@ class BigTile {
 
         return new BG(index.get(), hFlip, vFlip);
     }
+
+    @Override
+    public String toString() {
+        return "BigTile{" +
+                "index=" + index +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }
 

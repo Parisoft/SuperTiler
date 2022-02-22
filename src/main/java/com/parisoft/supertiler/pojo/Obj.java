@@ -85,4 +85,15 @@ class Obj {
     private static byte log2(byte n) {
         return (byte) (Math.log(n) / Math.log(2));
     }
+
+    @Override
+    public String toString() {
+        return "Obj{" +
+                "x=" + x +
+                ", y=" + y +
+                ", tile=" + tile +
+                ", attr=" + attr +
+                ", size=" + size +
+                '}';
+    }
 }

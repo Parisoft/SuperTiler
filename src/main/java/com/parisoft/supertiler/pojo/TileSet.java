@@ -34,7 +34,7 @@ public class TileSet extends AbstractSet<BigTile> {
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException();
+        return tiles.size();
     }
 
     public boolean add(BigTile bigTile) {
